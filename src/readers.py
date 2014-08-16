@@ -115,6 +115,13 @@ def _xml_reader(xml_file):
     return list
 
 
+def _txt_reader(txt_file):
+    list_line = []
+    for line in txt_file:
+        list_line.append(line.strip)
+    return list_line
+
+
 def _csv_reader(csv_file):
     list_line = []
     for line in csv_file:
@@ -163,22 +170,17 @@ def _csv_reader(csv_file):
     return list
 
 
+__readers = {'json': _json_reader,
+             'xml': _xml_reader,
+             'csv': _csv_reader,
+             'txt': _txt_reader}
+
+
 def read_file(input_file):
     file_open = open(input_file, 'r')
     file_extension = input_file.split('.')[-1]
 
-    if file_extension not in ('txt', 'json', 'csv', 'xml'):
-        print 'file format not support'
-        return False
+    if not __readers.has_key(file_extension):
+        raise Exception('File Format Not Support.')
 
-    if file_extension == 'json':
-        return _json_reader(file_open)
-        if file_extension == 'xml':
-            return _xml_reader(file_open)
-    else:
-        if file_extension == 'txt':
-            for line in file_open:
-                list_line = [line.replace("\n", "")]
-            return list_line
-        if file_extension == 'csv':
-            return _csv_reader(file_open)
+    return __readers[file_extension](file_open)

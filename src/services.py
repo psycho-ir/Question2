@@ -9,7 +9,6 @@ def analysis_transaction(input_file, output_file):
         list = []
         list_acc_no = []
         list_line = read_file(input_file)
-        file_extension = input_file.split('.')[-1]
 
         for rec1 in range(len(list_line)):
             row = list_line[rec1].split(' ')
@@ -40,7 +39,7 @@ def analysis_transaction(input_file, output_file):
                         list_acc_no[var2]['remain'] = list_acc_no[var2]['remain'] + (list[var]['amnt'])
 
         newlist = sorted(list_acc_no, key=lambda k: k['acc_no'])
-        write(output_file, newlist, file_extension)
+        write(output_file, newlist)
 
     except Exception as e:
         raise e

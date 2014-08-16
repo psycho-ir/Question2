@@ -23,8 +23,9 @@ def prettify(elem):
     return reparsed.toprettyxml(indent="  ")
 
 
-def write(file_name, list, extension):
-    with open(file_name + '.' + extension, 'w') as output:
+def write(file_name, list):
+    with open(file_name, 'w') as output:
+        extension =file_name.split('.')[-1]
         if extension == 'xml':
             doc = ET.Element("accounts_delta")
             for rec in range(len(list)):
