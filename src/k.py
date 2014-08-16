@@ -2,11 +2,11 @@ __author__ = 'soroosh'
 import xml.etree.ElementTree as ET
 
 
-# with open("../2/2/sample_input.txt", 'r') as f:
+# with open("../inputs/inputs/sample_input.txt", 'r') as f:
 # for line in f:
 # print line
 
-doc = ET.parse("../2/2/sample_input.xml")
+doc = ET.parse("../inputs/inputs/sample_input.xml")
 root = doc.getroot()  # <--- this is the new line
 list = []
 for rec in range(len(root._children)):

@@ -1,0 +1,118 @@
+<html>
+<head>
+    <title>Question 2 Document</title>
+    <style>
+        .code {
+            background-color: #BBBBBB;
+            width: 100%;
+            padding: 20px;
+            margin: 10px;
+        }
+
+        .alert {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>How to run project</h1>
+
+<p>
+    First you need to install requirements.
+    <br/>
+    Please run: pip install -r requirements.txt in root of project to install below packages:
+<ul>
+    <li>django: Web Framework</li>
+    <li>suds: Web Service Client</li>
+    <li>geoip2: For reading geoip db</li>
+    <li>easy-scheduler: For cleansing expired sessions (This is my own)</li>
+</ul>
+
+Then you can run project with running: python manage.py runserver
+By default project will listen on localhost:8000 but you can change it when you want to start poject with: <br/>
+python manage.py runserver ip:port
+
+<b>Note:</b> Don't forget to be in the root of project.
+</p>
+
+<h2>
+    Different Modules
+</h2>
+
+<h3>
+    geo_reader
+</h3>
+
+<p>
+    This module has just 1 function for getting info of given IP from geoip DB.
+</p>
+
+<h3>
+    client
+</h3>
+
+<p>
+    This module has just 1 function for getting info of ip from webservicex webservice.
+</p>
+
+<h2>
+    Web based uasge
+</h2>
+
+<p>
+    You can see your geography information on : / <br/>
+    This request will call ws_client.views.ShowIPView.get method. This method finds your IP if you are behind a NAT will read your IP from X-Forward-For header and
+    send a request to webservicex webservice. You can see the result on your screen :)
+
+</p>
+
+<h2>
+    Webservice usage
+</h2>
+
+<p>
+    I designed a rest-API for serving required functionalities as webservice.
+    At first you need to send a GET request to /service/login/{username}/{password}
+    Currently there are some sample username and passwords which you can use to login:
+<ul>
+    <li>
+        Username: soroosh Password: sarabadani
+    </li>
+    <li>
+        Username: user1 Password: pass1
+    </li>
+</ul>
+You request will send to ws_client.views.LoginView.get method. This controller will check your username and password then will
+create a session_id only if your username and password are correct. A JSON data you will receive in below format:
+<br/>
+
+<div class="code">
+    {"result": "OK", "session_id": session_id}
+</div>
+If username and password are not correct the result is ilike:
+<div class="code">
+    {"result": "ERROR", "reason": error_message}
+</div>
+
+After getting your session_id you can send your request for getting ip to country service to: /service/ip/{session_id}/{ip_address}
+<br/>
+If session_id is not expired and ip is valid then you will get a response like:
+<div class="code">
+    {"result": "OK", "country_name": country_name}
+</div>
+
+If not the response will be like:
+<div class="code">
+    {"result": "ERROR", "reason": error_message}
+</div>
+
+<b class="alert">
+    Note: The session timeout will be refreshed on every ip request. But if you don't send request for 10 minutes with a specific session_id
+    your session will be expired.
+</b>
+
+<b class="alert">Note: you can see relation between urls and views(controllers) in Question4.urls.py</b>
+
+
+</body>
+</html>
