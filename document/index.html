@@ -18,7 +18,7 @@
 <h1>How to run project</h1>
 
 <p>
-run_me.py is sample of analysis transaction service. when you run this file some samples files will be read from inputs
+    run_me.py is sample of analysis transaction service. when you run this file some samples files will be read from inputs
     and their analysis results will be written in oututs directory.
 
 </p>
@@ -30,6 +30,7 @@ run_me.py is sample of analysis transaction service. when you run this file some
 <h3>
     operations
 </h3>
+
 <p>
     Required operations to analyze transactions are in this module
 </p>
@@ -37,13 +38,25 @@ run_me.py is sample of analysis transaction service. when you run this file some
 <h3>
     readers
 </h3>
-<p>
-    Different reading strategies for different file extensions are in this module. <br />
-    read_file function is out public API which finds appropriate reader and return the result of reading.
-</p>
 
 <p>
-    This module has just 1 function for getting info of given IP from geoip DB.
+    Different reading strategies for different file extensions are in this module. <br/>
+    read_file function is our public API which finds appropriate reader and return the result of reading.
+</p>
+
+<h3>services</h3>
+
+<p>
+    Required services are in this module and is the entry point of applications for other sub systems.
+</p>
+
+<h3>
+    writers
+</h3>
+
+<p>
+    writing strategies for different file extensions are in this module. <br/>
+    write function is our public API which finds appropriate writer and write file.
 </p>
 
 <h3>

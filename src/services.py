@@ -3,6 +3,7 @@ from src.operations import variz, add_acc_no_to_list, bardasht
 from src.readers import read_file
 from src.writers import write
 
+
 def analysis_transaction(input_file, output_file):
     try:
         list = []
@@ -43,4 +44,8 @@ def analysis_transaction(input_file, output_file):
     except Exception as e:
         raise e
         # print e.message + '  ->  ' + 'File not found'
+
+
+def sort_transactions(input_filelist, out_basename):
+    pass
 
