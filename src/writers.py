@@ -1,8 +1,8 @@
+__author__ = 'soroosh'
 import json
 from xml.dom import minidom
 import operator
 
-__author__ = 'soroosh'
 import xml.etree.ElementTree as ET
 
 

@@ -18,30 +18,29 @@
 <h1>How to run project</h1>
 
 <p>
-    First you need to install requirements.
-    <br/>
-    Please run: pip install -r requirements.txt in root of project to install below packages:
-<ul>
-    <li>django: Web Framework</li>
-    <li>suds: Web Service Client</li>
-    <li>geoip2: For reading geoip db</li>
-    <li>easy-scheduler: For cleansing expired sessions (This is my own)</li>
-</ul>
+run_me.py is sample of analysis transaction service. when you run this file some samples files will be read from inputs
+    and their analysis results will be written in oututs directory.
 
-Then you can run project with running: python manage.py runserver
-By default project will listen on localhost:8000 but you can change it when you want to start poject with: <br/>
-python manage.py runserver ip:port
-
-<b>Note:</b> Don't forget to be in the root of project.
 </p>
 
 <h2>
-    Different Modules
+    Different Modules For analysing transactions
 </h2>
 
 <h3>
-    geo_reader
+    operations
 </h3>
+<p>
+    Required operations to analyze transactions are in this module
+</p>
+
+<h3>
+    readers
+</h3>
+<p>
+    Different reading strategies for different file extensions are in this module. <br />
+    read_file function is out public API which finds appropriate reader and return the result of reading.
+</p>
 
 <p>
     This module has just 1 function for getting info of given IP from geoip DB.

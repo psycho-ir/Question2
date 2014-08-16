@@ -1,8 +1,6 @@
+__author__ = 'soroosh'
 import json
 import xml.etree.ElementTree as ET
-
-__author__ = 'soroosh'
-
 
 def _json_reader(json_file):
     list = []
@@ -118,7 +116,7 @@ def _xml_reader(xml_file):
 def _txt_reader(txt_file):
     list_line = []
     for line in txt_file:
-        list_line.append(line.strip)
+        list_line.append(line.strip())
     return list_line
 
 

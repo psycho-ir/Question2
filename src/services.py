@@ -1,8 +1,7 @@
+__author__ = 'soroosh'
 from src.operations import variz, add_acc_no_to_list, bardasht
 from src.readers import read_file
 from src.writers import write
-
-__author__ = 'soroosh'
 
 def analysis_transaction(input_file, output_file):
     try:
