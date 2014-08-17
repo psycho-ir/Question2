@@ -1,57 +1,11 @@
+__author__ = 'soroosh'
 from src.repository import persist_bulk
 import multiprocessing
 from multiprocessing.queues import Empty
 
-__author__ = 'Ebrahimi'
 from itertools import islice
 import logging
 
-
-# def read_file(path, file_name, file_extension):
-# def read_file(q):
-# try:
-# item = q.get_nowait()
-# except Empty as e:
-# logging.info('No task for me :(')
-#         return
-#     logging.basicConfig(level=logging.INFO)
-#     file_extension = item[2]
-#
-#     input_file = open(item[0] + item[1] + "." + file_extension, 'r')
-#     line_count = 400000
-#     while True:
-#         list_of_dic_dep = []
-#         list_of_dic_pay = []
-#         list_of_dic_trans = []
-#         slice = islice(input_file, line_count)
-#
-#         for l in slice:
-#             dic = {}
-#             if file_extension == 'txt':
-#                 rec = l.split(' ')
-#
-#             if rec[0] in ('Deposit', 'deposit'):
-#                 # dic['type'] = 'Deposit'
-#                 dic['acc1'] = rec[1]
-#                 dic['amnt'] = float(rec[2].strip())
-#                 list_of_dic_dep.append(dic)
-#                 continue
-#             if rec[0] in ('Payment', 'payment'):
-#                 # dic['type'] = 'Payment'
-#                 dic['acc1'] = rec[1]
-#                 dic['amnt'] = float(rec[2].strip())
-#                 list_of_dic_pay.append(dic)
-#                 continue
-#             if rec[0] in ('Transfer', 'transfer'):
-#                 # dic['type'] = 'Transfer'
-#                 dic['acc1'] = rec[1]
-#                 dic['acc2'] = rec[4]
-#                 dic['amnt'] = float(rec[2].strip())
-#                 list_of_dic_trans.append(dic)
-#                 continue
-#         if len(list_of_dic_pay) == 0 and len(list_of_dic_dep) == 0 and len(list_of_dic_trans) == 0:
-#             break;
-#         persist_bulk(list_of_dic_pay, list_of_dic_dep, list_of_dic_trans)
 
 def read_file(q):
     try:
@@ -245,12 +199,3 @@ def read_file_txt(input_file):
             break;
         persist_bulk(list_of_dic_pay, list_of_dic_dep, list_of_dic_trans)
     return True
-
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    q = multiprocessing.Queue()
-    ps = [multiprocessing.Process(target=read_file, args=(q,), name="P-" + str(i)) for i in xrange(multiprocessing.cpu_count())]
-
-    input_path_list = ["../inputs/sort_problem/sample_input_2.txt", "../inputs/sort_problem/sample_input_1.txt", "../inputs/sort_problem/small.txt"]
-    # sort_transactions(input_path_list, 'aaa')

@@ -1,11 +1,12 @@
+__author__ = 'soroosh'
 import logging
 import multiprocessing
-
-__author__ = 'soroosh'
 from src.operations import variz, add_acc_no_to_list, bardasht
 from src.readers import read_file
 from src.importer import read_file as rf
 from src.writers import write
+import repository
+import partitioner
 
 
 def analysis_transaction(input_file, output_file):
@@ -46,43 +47,35 @@ def analysis_transaction(input_file, output_file):
         write(output_file, newlist)
 
     except Exception as e:
-        raise e
-        # print e.message + '  ->  ' + 'File not found'
-
-
-import repository
-import partitioner
+        print e
 
 
 def sort_transactions(input_path_list, output_basename):
     logging.basicConfig(level=logging.INFO)
     q = multiprocessing.Queue()
     ps = [multiprocessing.Process(target=rf, args=(q,), name="P-" + str(i)) for i in xrange(multiprocessing.cpu_count())]
+    # All paths are put in queue for processes
     for path in input_path_list:
         file_name_by_ext = path.split("/")[-1]
         path_without_file = path.replace(file_name_by_ext, "")
         file_name = file_name_by_ext.split('.')[-2]
         file_extension = file_name_by_ext.split('.')[-1]
-        # read_file(path_without_file, file_name, file_extension)
         q.put((path_without_file, file_name, file_extension,))
+    # Processes are responsible to read files and wirte them in mongodb
     map(lambda p: p.start(), ps)
     map(lambda p: p.join(), ps)
     # Now all transactoins are persisted in our repository
-    # We create some index
+    # I create some indexes after insertion to increase sorting performance
     print "Creating Indexes on collections"
     repository.create_indexes()
     print "Indexes created..."
     print "Creating Deposit Files"
+    # For every transaction type i create a process to read from collection and create file.
+    # So files are creating parallel to maximise throughput
     extension = input_path_list[0].split('.')[-1]
-    deposit_p = multiprocessing.Process(name="DEPOSIT-PROCESS", target=partitioner.create_deposit_files, args=(0, output_basename, extension))
-    transfer_p = multiprocessing.Process(name="TRANSFER-PROCESS", target=partitioner.create_transfer_files, args=(0, output_basename, extension))
-    payment_p = multiprocessing.Process(name="PAYMENT-PROCESS", target=partitioner.create_payment_files, args=(0, output_basename, extension))
-
-    deposit_p.start()
-    transfer_p.start()
-    payment_p.start()
-    deposit_p.join()
-    transfer_p.join()
-    payment_p.join()
-    print "Now you can use your files"
+    jobs = [multiprocessing.Process(name="DEPOSIT-PROCESS", target=partitioner.create_deposit_files, args=(0, output_basename, extension)),
+            multiprocessing.Process(name="TRANSFER-PROCESS", target=partitioner.create_transfer_files, args=(0, output_basename, extension)),
+            multiprocessing.Process(name="PAYMENT-PROCESS", target=partitioner.create_payment_files, args=(0, output_basename, extension))]
+    map(lambda p: p.start(), jobs)
+    map(lambda p: p.join(), jobs)
 

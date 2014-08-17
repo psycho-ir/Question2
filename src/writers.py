@@ -18,7 +18,7 @@ def _prettify(elem):
     """Return a pretty-printed XML string for the Element.
     """
     w = XMLWriter()
-    rough_string = ET.ElementTree(elem).write(w)
+    ET.ElementTree(elem).write(w)
     reparsed = minidom.parseString(w.result)
     return reparsed.toprettyxml(indent="  ")
 

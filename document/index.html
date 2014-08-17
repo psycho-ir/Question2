@@ -18,9 +18,11 @@
 <h1>How to run project</h1>
 
 <p>
-    run_me.py is sample of analysis transaction service. when you run this file some samples files will be read from inputs
+    run_me_analyse.py is sample of analysis transaction service. when you run this file some samples files will be read from inputs
     and their analysis results will be written in oututs directory.
 
+    run_me_sort.py is sample of sorting transaction service. when you run this file some input files will be sorted in
+    /sort_result directory. Files are categorised by transaction type.
 </p>
 
 <h2>
@@ -59,16 +61,62 @@
     write function is our public API which finds appropriate writer and write file.
 </p>
 
+<h2>
+    Different modules for sorting transactions
+</h2>
+
+<p>
+    For sortings transactions i insert all input transactions in mongodb. Then i create index on collections and then sort collections and export result to chunked files.
+    On reading files and writing files application works in parallel.
+</p>
+
 <h3>
-    client
+    config.py
 </h3>
 
 <p>
-    This module has just 1 function for getting info of ip from webservicex webservice.
+    Mongodb configuration is in this module. So please set its values with correspond to your mongodb configuration
 </p>
 
+<h3>
+    importer.py
+</h3>
 
+<p>
+    read_file is the main API of this module
+    read_file get queue item which has path,file_name and file_extension. Then this function select an appropriate reader for reading
+    file and import it in mongodb.
 
+</p>
+
+<h3>
+    partitioner.py
+</h3>
+
+<p>
+    Partitioner module is responsible to read transactions from repository and create chunked file for every transaction type.
+    This modules uses different strategies to write different type of files.
+</p>
+
+<h3>
+    repository.py
+</h3>
+
+<p>
+    repository module is responsible for interaction with mongodb.
+    Bulk Insertion <br/>
+    Creating indexes <br/>
+    Reading from collections <br/>
+    are operations that this module can do
+</p>
+
+<h3>
+    service.py
+</h3>
+
+<p>
+    sort_transactions of this module is the main entry point of our API
+</p>
 
 </body>
 </html>
