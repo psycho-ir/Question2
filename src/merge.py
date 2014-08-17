@@ -29,7 +29,7 @@ def merge_file(queue):
     while True:
         try:
             item = queue.get(timeout=5)
-            print 'reading %s and %s' %(item.file1,item.file2)
+            print 'reading %s and %s' % (item.file1, item.file2)
             with open(item.file1, 'r') as file1:
                 with open(item.file2, 'r') as file2:
                     with open(item.merge_name, 'w') as out:
@@ -56,7 +56,7 @@ def merge_file(queue):
             os.remove(item.file2)
 
         except Exception as e:
-            break
+            raise e
 
 
 from datetime import datetime
