@@ -32,21 +32,26 @@ def read_file(q):
         read_file_json(input_file)
         logging.info("read json file and insert to db ")
 
-
 def read_file_json(input_file):
     list_of_dic_dep = []
     list_of_dic_pay = []
     list_of_dic_trans = []
     first_braket = False
+    first_kroshe = False
     str_json = ''
     dic = {}
     while True:
+
         slice = islice(input_file, line_count)
+
         for l in slice:
-            if first_braket or l.find('[') > -1:
+            if l.find('[') > -1:
+                l = l[l.find('[') + 1:]
                 first_braket = True
+            if first_braket or l.find('[') > -1:
                 if l.find(']') == -1:
-                    if l.find('{') > -1:
+                    if first_kroshe or l.find('{') > -1:
+                        first_kroshe = True
                         str_json += l.strip()
                         if str_json.find('}') > -1:
                             tmp_str_json = str_json[str_json.find('{') + 1:str_json.find('}')]
@@ -65,6 +70,7 @@ def read_file_json(input_file):
                                         dic['amnt'] = float(rec1.split('amount:')[1])
                                 list_of_dic_dep.append(dic)
                                 dic = {}
+                                first_kroshe = False
                                 continue
                             if tmp_str_json.find('payment') > -1:
                                 for rec1 in tmp_str_json.split(','):
@@ -74,6 +80,7 @@ def read_file_json(input_file):
                                         dic['amnt'] = float(rec1.split('amount:')[1])
                                 list_of_dic_pay.append(dic)
                                 dic = {}
+                                first_kroshe = False
                                 continue
                             if tmp_str_json.find('transfer') > -1:
                                 for rec1 in tmp_str_json.split(','):
@@ -85,6 +92,7 @@ def read_file_json(input_file):
                                         dic['amnt'] = float(rec1.split('amount:')[1])
                                 list_of_dic_trans.append(dic)
                                 dic = {}
+                                first_kroshe = False
                                 continue
                             else:
                                 continue
@@ -95,6 +103,70 @@ def read_file_json(input_file):
         list_of_dic_dep = []
         list_of_dic_pay = []
         list_of_dic_trans = []
+
+
+# def read_file_json(input_file):
+#     list_of_dic_dep = []
+#     list_of_dic_pay = []
+#     list_of_dic_trans = []
+#     first_braket = False
+#     str_json = ''
+#     dic = {}
+#     while True:
+#         slice = islice(input_file, line_count)
+#         for l in slice:
+#             if first_braket or l.find('[') > -1:
+#                 first_braket = True
+#                 if l.find(']') == -1:
+#                     if l.find('{') > -1:
+#                         str_json += l.strip()
+#                         if str_json.find('}') > -1:
+#                             tmp_str_json = str_json[str_json.find('{') + 1:str_json.find('}')]
+#                             str_json = str_json[str_json.find('}') + 1:]
+#                             tmp_str_json = tmp_str_json.replace('\'\'', '').replace('\'\'', '').replace('\"',
+#                                                                                                         '').replace(
+#                                 '\"',
+#                                 '').replace(
+#                                 '{', '').replace('}', '')
+#                             # for rec in tmp_str_json.split('type'):
+#                             if tmp_str_json.find('deposit') > -1:
+#                                 for rec1 in tmp_str_json.split(','):
+#                                     if rec1.find('account_id:') > -1:
+#                                         dic['acc1'] = rec1.split('account_id:')[1]
+#                                     if rec1.find('amount:') > -1:
+#                                         dic['amnt'] = float(rec1.split('amount:')[1])
+#                                 list_of_dic_dep.append(dic)
+#                                 dic = {}
+#                                 continue
+#                             if tmp_str_json.find('payment') > -1:
+#                                 for rec1 in tmp_str_json.split(','):
+#                                     if rec1.find('account_id:') > -1:
+#                                         dic['acc1'] = rec1.split('account_id:')[1]
+#                                     if rec1.find('amount:') > -1:
+#                                         dic['amnt'] = float(rec1.split('amount:')[1])
+#                                 list_of_dic_pay.append(dic)
+#                                 dic = {}
+#                                 continue
+#                             if tmp_str_json.find('transfer') > -1:
+#                                 for rec1 in tmp_str_json.split(','):
+#                                     if rec1.find('from:') > -1:
+#                                         dic['acc1'] = rec1.split('from:')[1]
+#                                     if rec1.find('to:') > -1:
+#                                         dic['acc2'] = rec1.split('to:')[1]
+#                                     if rec1.find('amount:') > -1:
+#                                         dic['amnt'] = float(rec1.split('amount:')[1])
+#                                 list_of_dic_trans.append(dic)
+#                                 dic = {}
+#                                 continue
+#                             else:
+#                                 continue
+#                 else:
+#                     persist_bulk(list_of_dic_pay, list_of_dic_dep, list_of_dic_trans)
+#                     return
+#         persist_bulk(list_of_dic_pay, list_of_dic_dep, list_of_dic_trans)
+#         list_of_dic_dep = []
+#         list_of_dic_pay = []
+#         list_of_dic_trans = []
 
 
 def read_file_xml(input_file):
